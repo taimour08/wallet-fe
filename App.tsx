@@ -11,9 +11,7 @@ export default function App() {
         backgroundColor: '#fff',
       }}
     >
-      <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
-        React Native Based Wallet App
-      </Text>
+      <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Based Wallet App</Text>
     </View>
   );
 }
