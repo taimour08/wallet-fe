@@ -2,16 +2,22 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "lib": ["ESNext", "DOM"],
-    "allowJs": true,
-    "jsx": "react-jsx",
-    "strict": true,
     "moduleResolution": "node",
+    "jsx": "react-native",
+    "allowJs": true,
+    "strict": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "typeRoots": ["./node_modules/@types", "./types"],
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true
+    "skipLibCheck": true
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src",
+    "types",
+    "index.js",
+    "App.js"
+  ],
+  "exclude": ["node_modules", "android", "ios"]
 }

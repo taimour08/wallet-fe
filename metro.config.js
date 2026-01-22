@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-import { mergeConfig } from '@react-native/metro-config';
-import { getDefaultConfig as getMetroDefaultConfig } from '@react-native/metro-config';
-
 /**
- * Metro configuration
- * https://reactnative.dev/docs/metro
+ * Metro configuration for React Native
+ * https://github.com/facebook/react-native
  *
- * @type {import('@react-native/metro-config').MetroConfig}
+ * @format
  */
-const config = {};
 
-export default mergeConfig(getMetroDefaultConfig(__dirname), config);
+const { getDefaultConfig } = require('@react-native/metro-config');
+
+const config = getDefaultConfig(__dirname);
+
+module.exports = config;

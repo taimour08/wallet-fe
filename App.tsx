@@ -1,17 +1,12 @@
-import React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, Text } from 'react-native';
 
 export default function App() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-      }}
-    >
-      <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Based Wallet App</Text>
-    </View>
+    <SafeAreaProvider>
+      <View className="flex-1 justify-center items-center bg-blue-500">
+        <Text className="text-white text-lg">Hello NativeWind!</Text>
+      </View>
+    </SafeAreaProvider>
   );
 }
