@@ -1,30 +1,12 @@
 module.exports = {
-  env: {
-    browser: true,
-    node: true,
-    es2021: true,
-  },
-  parser: '@typescript-eslint/parser', // <-- enable TypeScript parsing
-  parserOptions: {
-    ecmaVersion: 2021,
-    sourceType: 'module',
-    ecmaFeatures: {
-      jsx: true,
-    },
-  },
-  plugins: ['@typescript-eslint', 'react'],
+  root: true,
   extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended', // <-- TS rules
-    'prettier',
+    '@react-native', // this replaced @react-native-community
+    'prettier', // turns off conflicting rules
   ],
-  settings: {
-    react: {
-      version: 'detect',
-    },
-  },
+  plugins: ['prettier'],
   rules: {
-    // your custom rules here
+    'prettier/prettier': 'error',
+    // your custom rules here if any
   },
 };

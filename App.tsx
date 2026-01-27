@@ -1,14 +1,30 @@
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { View, Text } from 'react-native';
-import './global.css';
 
+import SplashScreen from './components/SplashScreen';
+import LoginScreen from './components/LoginScreen';
+
+// Create the stack navigator
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <SafeAreaProvider>
-      <View className="flex-1 justify-center items-center bg-blue-500">
-        <Text className="text-white text-lg">Hello NativeWind!</Text>
-      </View>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="Splash"
+          screenOptions={{
+            headerShown: false, // hide header on all screens
+            animation: 'fade', // smooth fade transition
+          }}
+        >
+          <Stack.Screen name="Splash" component={SplashScreen} />
+
+          <Stack.Screen name="Login" component={LoginScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </SafeAreaProvider>
   );
 }
