@@ -7,121 +7,166 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
+  Alert,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import '../global.css'; // NativeWind Tailwind import
+import '../global.css';
 
 export default function LoginScreen() {
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
-  const roles = ['User', 'Merchant', 'Admin'];
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const roles = ['User', 'Admin'] as const;
+
+  const rolePadding: Record<(typeof roles)[number], string> = {
+    User: 'px-8',
+    Admin: 'px-7',
+  };
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter email and password');
+      return;
+    }
+
+    if (!selectedRole) {
+      Alert.alert('Error', 'Please select a role');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        'http://192.168.18.107:3000/api/auth/login',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        Alert.alert(
+          'Successful',
+          `Welcome back, ${data.user?.name || 'User'}!`,
+        );
+      } else {
+        Alert.alert('Unsuccessful', data.error || 'Login failed');
+      }
+    } catch (error) {
+      Alert.alert('Unsuccessful', 'Network error');
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20} // small adjustment for Android
     >
       <ScrollView
-        keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ flexGrow: 1 }}
-        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
-        <View className="flex-1 items-center bg-teal-600 px-6 pt-12 pb-4">
-          {/* Card */}
+        <View className="flex-1 items-center bg-teal-600 px-6 pt-36">
           <View className="w-full max-w-md rounded-3xl bg-white p-8 shadow-2xl">
             {/* Header */}
-            <View className="mb-10 mt-12">
-              <View className="flex-row items-center gap-3">
-                <Text className="text-3xl font-bold text-black w-full text-center">
-                  Welcome Back
-                </Text>
-              </View>
+            <View className="mb-10 mt-2">
+              <Text className="text-3xl font-bold text-center text-black">
+                Welcome Back
+              </Text>
               <Text className="text-xl mt-2 text-gray-600 text-center">
                 Sign in to access your account
               </Text>
             </View>
 
-            {/* Role buttons */}
-            <View className="mt-4 flex-row justify-center items-center gap-2">
-              {roles.map(role => (
-                <Pressable
-                  key={role}
-                  onPress={() => setSelectedRole(role)}
-                  className={`
-                    px-${role === 'Merchant' ? '4' : role === 'Admin' ? '7' : '8'}
-                    py-2 rounded-2xl shadow-md transition-colors duration-200
-                    ${selectedRole === role ? 'bg-emerald-600 shadow-lg' : 'bg-gray-200 shadow-md'}
-                  `}
-                >
-                  <Text
+            {/* Roles */}
+            <View className="flex-row justify-center gap-2">
+              {roles.map(role => {
+                const active = selectedRole === role;
+                return (
+                  <Pressable
+                    key={role}
+                    onPress={() => setSelectedRole(role)}
                     className={`
-                      text-md font-semibold
-                      ${selectedRole === role ? 'text-white' : 'text-gray-800'}
+                      ${rolePadding[role]}
+                      py-2 rounded-2xl
+                      ${active ? 'bg-emerald-600' : 'bg-gray-200'}
                     `}
                   >
-                    {role}
-                  </Text>
-                </Pressable>
-              ))}
+                    <Text
+                      className={`font-semibold ${
+                        active ? 'text-white' : 'text-gray-800'
+                      }`}
+                    >
+                      {role}
+                    </Text>
+                  </Pressable>
+                );
+              })}
             </View>
 
             {/* Form */}
-            <View className="space-y-4 mt-8">
-              {/* Email */}
+            <View className="mt-8 space-y-4">
               <View>
-                <Text className="mb-2 text-xl font-medium text-gray-700">
+                <Text className="mb-2 text-lg font-medium text-gray-700">
                   Email
                 </Text>
                 <TextInput
-                  placeholder="user@example.com"
-                  defaultValue="demo@rahipay.com"
+                  value={email}
+                  onChangeText={setEmail}
+                  autoCapitalize="none"
                   keyboardType="email-address"
-                  className="w-full rounded-xl border border-gray-300 px-4 py-3"
+                  className="border border-gray-300 rounded-xl px-4 py-3 text-black"
+                  placeholderTextColor="#9CA3AF"
                 />
               </View>
 
-              {/* Password */}
               <View>
-                <Text className="mt-4 mb-2 text-xl font-medium text-gray-700">
+                <Text className="mb-2 text-lg font-medium text-gray-700">
                   Password
                 </Text>
                 <TextInput
-                  placeholder="••••••••"
-                  defaultValue="password123"
+                  value={password}
+                  onChangeText={setPassword}
                   secureTextEntry
-                  className="w-full rounded-xl border border-gray-300 px-4 py-3"
+                  className="border border-gray-300 rounded-xl px-4 py-3 text-black"
+                  placeholderTextColor="#9CA3AF"
                 />
               </View>
 
-              {/* Sign In Button */}
-              <Pressable className="mt-5">
+              {/* Login Button */}
+              <Pressable
+                onPress={handleLogin}
+                disabled={loading}
+                className="mt-5"
+              >
                 <LinearGradient
                   colors={['#059669', '#0d9488', '#0891b2']}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
-                  className="w-full rounded-xl py-3 items-center"
+                  className="rounded-xl py-3 items-center"
+                  style={{ opacity: loading ? 0.6 : 1 }}
                 >
-                  <Text className="font-semibold text-white text-xl">
-                    Sign In
+                  <Text className="text-white font-semibold text-xl">
+                    {loading ? 'Signing in...' : 'Sign In'}
                   </Text>
                 </LinearGradient>
               </Pressable>
             </View>
 
-            {/* Biometric */}
-            <View className="mt-8 items-center">
-              <Pressable>
-                <Text className="text-sm font-medium text-emerald-600 text-xl">
-                  Use Biometric Login
-                </Text>
-              </Pressable>
-            </View>
-
             {/* Footer */}
-            <View className="mt-6 border-t border-gray-200 pt-6 items-center">
-              <Text className="text-xl text-gray-600">
-                Don't have an account?{' '}
-                <Text className="font-medium text-emerald-600">Sign Up</Text>
+            <View className="mt-8 items-center">
+              <Text className="text-gray-600 text-lg">
+                Don’t have an account?{' '}
+                <Text className="text-emerald-600 font-medium">Sign Up</Text>
               </Text>
             </View>
           </View>
