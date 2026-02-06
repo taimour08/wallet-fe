@@ -7,7 +7,8 @@ import SplashScreen from './components/SplashScreen';
 import LoginScreen from './components/LoginScreen';
 import SignupScreen from './components/SignupScreen';
 import PinScreen from './components/PinScreen';
-//import PracticeScreen from './components/PracticeScreen';
+import BiometricScreen from './components/BiometricScreen';
+import Home from './components/Home';
 
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
@@ -17,7 +18,7 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Pin"
+          initialRouteName="Biometric"
           screenOptions={{
             headerShown: false, // hide header on all screens
             animation: 'fade', // smooth fade transition
@@ -30,6 +31,10 @@ export default function App() {
           <Stack.Screen name="Signup" component={SignupScreen} />
 
           <Stack.Screen name="Pin" component={PinScreen} />
+
+          <Stack.Screen name="Biometric" component={BiometricScreen} />
+
+          <Stack.Screen name="Home" component={Home} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
