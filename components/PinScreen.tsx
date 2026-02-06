@@ -105,11 +105,11 @@ export default function SetPinScreen() {
   };
 
   const PinDots = ({ currentValue }: { currentValue: string }) => (
-    <View className="flex-row justify-center space-x-4 my-8">
+    <View className="flex-row justify-center gap-4 my-10">
       {Array.from({ length: MAX_PIN_LENGTH }).map((_, index) => (
         <View
           key={index}
-          className={`w-4 h-4 rounded-full border-2 ${
+          className={`w-7 h-7 rounded-full border-2 ${
             index < currentValue.length
               ? 'bg-emerald-600 border-emerald-600'
               : 'border-gray-300 bg-white'
